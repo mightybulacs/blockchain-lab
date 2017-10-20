@@ -169,7 +169,7 @@ function generateChannelArtifacts() {
     echo "###############################################################"
     echo "#############  Generating orderer genesis block ###############"
     echo "###############################################################"
-    configtxgen -profile TwoOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
+    configtxgen -profile NOrgsOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
     if [ "$?" -ne 0 ]; then
         echo "failed to generate orderer genesis block. exiting..."
         exit 1
@@ -180,7 +180,7 @@ function generateChannelArtifacts() {
     echo "## Generating channel configuration transaction 'channel.tx' ##"
     echo "###############################################################"
 
-    configtxgen -profile TwoOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+    configtxgen -profile NOrgsChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
     if [ "$?" -ne 0 ]; then
         echo "failed to generate channel configuration. exiting..."
         exit 1
@@ -196,7 +196,7 @@ function generateChannelArtifacts() {
     for i in $(ls); do
         ORG=${i%%/};
         cd $CURRENT_DIR
-        configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/${ORG}MSPAnchors.tx -channelID $CHANNEL_NAME -asOrg ${ORG}MSP
+        configtxgen -profile NOrgsChannel -outputAnchorPeersUpdate ./channel-artifacts/${ORG}MSPAnchors.tx -channelID $CHANNEL_NAME -asOrg ${ORG}MSP
         if [ "$?" -ne 0 ]; then
             echo "failed to generate anchor peer update. exiting..."
             exit 1

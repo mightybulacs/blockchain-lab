@@ -13,8 +13,7 @@
 #
 ################################################################################
 Profiles:
-
-    TwoOrgsOrdererGenesis:
+    NOrgsOrdererGenesis:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
@@ -22,15 +21,21 @@ Profiles:
         Consortiums:
             SampleConsortium:
                 Organizations:
-                    - *CodeMagnus
-                    - *Mightybulacs
-    TwoOrgsChannel:
+                    - *Store
+                    - *Bank
+                    - *Shipper
+                    - *Port
+                    - *Supplier
+    NOrgsChannel:
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *CodeMagnus
-                - *Mightybulacs
+                - *Store
+                - *Bank
+                - *Shipper
+                - *Port
+                - *Supplier
 
 ################################################################################
 #
@@ -41,52 +46,45 @@ Profiles:
 #
 ################################################################################
 Organizations:
-
-    # SampleOrg defines an MSP using the sampleconfig.  It should never be used
-    # in production but may be used as a template for other definitions
     - &Orderer
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
         Name: Orderer
-
-        # ID to load the MSP definition as
         ID: OrdererMSP
-
-        # MSPDir is the filesystem path which contains the MSP configuration
         MSPDir: crypto-config/ordererOrganizations/codedisruptors.com/msp
 
-    - &CodeMagnus
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
-        Name: codemagnus.comMSP
-
-        # ID to load the MSP definition as
-        ID: CodeMagnusMSP
-
-        MSPDir: crypto-config/peerOrganizations/codemagnus.com/msp
-
+    - &Store
+        Name: store.comMSP
+        ID: StoreMSP
+        MSPDir: crypto-config/peerOrganizations/store.com/msp
         AnchorPeers:
-            # AnchorPeers defines the location of peers which can be used
-            # for cross org gossip communication.  Note, this value is only
-            # encoded in the genesis block in the Application section context
-            - Host: peer0.codemagnus.com
+            - Host: peer0.store.com
               Port: 7051
-
-    - &Mightybulacs
-        # DefaultOrg defines the organization which is used in the sampleconfig
-        # of the fabric.git development environment
-        Name: mightybulacs.comMSP
-
-        # ID to load the MSP definition as
-        ID: MightybulacsMSP
-
-        MSPDir: crypto-config/peerOrganizations/mightybulacs.com/msp
-
+    - &Bank
+        Name: bank.comMSP
+        ID: BankMSP
+        MSPDir: crypto-config/peerOrganizations/bank.com/msp
         AnchorPeers:
-            # AnchorPeers defines the location of peers which can be used
-            # for cross org gossip communication.  Note, this value is only
-            # encoded in the genesis block in the Application section context
-            - Host: peer0.mightybulacs.com
+            - Host: peer0.bank.com
+              Port: 7051
+    - &Shipper
+        Name: shipper.comMSP
+        ID: ShipperMSP
+        MSPDir: crypto-config/peerOrganizations/shipper.com/msp
+        AnchorPeers:
+            - Host: peer0.shipper.com
+              Port: 7051
+    - &Port
+        Name: port.comMSP
+        ID: PortMSP
+        MSPDir: crypto-config/peerOrganizations/port.com/msp
+        AnchorPeers:
+            - Host: peer0.port.com
+              Port: 7051
+    - &Supplier
+        Name: supplier.comMSP
+        ID: SupplierMSP
+        MSPDir: crypto-config/peerOrganizations/supplier.com/msp
+        AnchorPeers:
+            - Host: peer0.supplier.com
               Port: 7051
 
 ################################################################################

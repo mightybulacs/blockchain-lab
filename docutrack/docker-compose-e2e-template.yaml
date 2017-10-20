@@ -12,16 +12,16 @@ services:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-org1
+      - FABRIC_CA_SERVER_CA_NAME=ca-store
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.codemagnus.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.store.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.codemagnus.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.store.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
     volumes:
-      - ./crypto-config/peerOrganizations/codemagnus.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca_peerOrg1
+      - ./crypto-config/peerOrganizations/store.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca_peerStore
     networks:
       - byfn
 
@@ -29,55 +29,95 @@ services:
     image: hyperledger/fabric-ca
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca-org2
+      - FABRIC_CA_SERVER_CA_NAME=ca-supplier
       - FABRIC_CA_SERVER_TLS_ENABLED=true
-      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.mightybulacs.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.supplier.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
     ports:
       - "8054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.mightybulacs.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.supplier.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/mightybulacs.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca_peerOrg2
+    container_name: ca_peerSupplier
     networks:
       - byfn
 
-  orderer.codedisruptors.com:
-    extends:
-      file:   base/docker-compose-base.yaml
-      service: orderer.codedisruptors.com
-    container_name: orderer.codedisruptors.com
-    networks:
-      - byfn
-
-  peer0.codemagnus.com:
-    container_name: peer0.codemagnus.com
+  peer0.store.com:
+    container_name: peer0.store.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.codemagnus.com
+      service: peer0.store.com
     networks:
       - byfn
 
-  peer1.codemagnus.com:
-    container_name: peer1.codemagnus.com
+  peer1.store.com:
+    container_name: peer1.store.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer1.codemagnus.com
+      service: peer1.store.com
     networks:
       - byfn
 
-  peer0.mightybulacs.com:
-    container_name: peer0.mightybulacs.com
+  peer0.bank.com:
+    container_name: peer0.bank.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.mightybulacs.com
+      service: peer0.bank.com
     networks:
       - byfn
 
-  peer1.mightybulacs.com:
-    container_name: peer1.mightybulacs.com
+  peer1.bank.com:
+    container_name: peer1.bank.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer1.mightybulacs.com
+      service: peer1.bank.com
+    networks:
+      - byfn
+
+  peer0.shipper.com:
+    container_name: peer0.shipper.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.shipper.com
+    networks:
+      - byfn
+
+  peer1.shipper.com:
+    container_name: peer1.shipper.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.shipper.com
+    networks:
+      - byfn
+
+  peer0.port.com:
+    container_name: peer0.port.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.port.com
+    networks:
+      - byfn
+
+  peer1.port.com:
+    container_name: peer1.port.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.port.com
+    networks:
+      - byfn
+
+  peer0.supplier.com:
+    container_name: peer0.supplier.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.supplier.com
+    networks:
+      - byfn
+
+  peer1.supplier.com:
+    container_name: peer1.supplier.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.supplier.com
     networks:
       - byfn

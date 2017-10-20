@@ -18,35 +18,83 @@ services:
     networks:
       - byfn
 
-  peer0.codemagnus.com:
-    container_name: peer0.codemagnus.com
+  peer0.store.com:
+    container_name: peer0.store.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.codemagnus.com
+      service: peer0.store.com
     networks:
       - byfn
 
-  peer1.codemagnus.com:
-    container_name: peer1.codemagnus.com
+  peer1.store.com:
+    container_name: peer1.store.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer1.codemagnus.com
+      service: peer1.store.com
     networks:
       - byfn
 
-  peer0.mightybulacs.com:
-    container_name: peer0.mightybulacs.com
+  peer0.bank.com:
+    container_name: peer0.bank.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.mightybulacs.com
+      service: peer0.bank.com
     networks:
       - byfn
 
-  peer1.mightybulacs.com:
-    container_name: peer1.mightybulacs.com
+  peer1.bank.com:
+    container_name: peer1.bank.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer1.mightybulacs.com
+      service: peer1.bank.com
+    networks:
+      - byfn
+
+  peer0.shipper.com:
+    container_name: peer0.shipper.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.shipper.com
+    networks:
+      - byfn
+
+  peer1.shipper.com:
+    container_name: peer1.shipper.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.shipper.com
+    networks:
+      - byfn
+
+  peer0.port.com:
+    container_name: peer0.port.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.port.com
+    networks:
+      - byfn
+
+  peer1.port.com:
+    container_name: peer1.port.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.port.com
+    networks:
+      - byfn
+
+  peer0.supplier.com:
+    container_name: peer0.supplier.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.supplier.com
+    networks:
+      - byfn
+
+  peer1.supplier.com:
+    container_name: peer1.supplier.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.supplier.com
     networks:
       - byfn
 
@@ -59,13 +107,13 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=DEBUG
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.codemagnus.com:7051
-      - CORE_PEER_LOCALMSPID=codemagnus.comMSP
+      - CORE_PEER_ADDRESS=peer0.store.com:7051
+      - CORE_PEER_LOCALMSPID=store.comMSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/users/Admin@codemagnus.com/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/store.com/peers/peer0.store.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/store.com/peers/peer0.store.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/store.com/peers/peer0.store.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/store.com/users/Admin@store.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     # command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME} ${DELAY}; sleep $TIMEOUT'
     volumes:
@@ -76,10 +124,16 @@ services:
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
       - orderer.codedisruptors.com
-      - peer0.codemagnus.com
-      - peer1.codemagnus.com
-      - peer0.mightybulacs.com
-      - peer1.mightybulacs.com
+      - peer0.store.com
+      - peer1.store.com
+      - peer0.bank.com
+      - peer1.bank.com
+      - peer0.shipper.com
+      - peer1.shipper.com
+      - peer0.port.com
+      - peer1.port.com
+      - peer0.supplier.com
+      - peer1.supplier.com
     networks:
       - byfn
 

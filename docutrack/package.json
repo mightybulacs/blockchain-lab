@@ -1,0 +1,26 @@
+{
+  "name": "docutrack",
+  "version": "1.0.0",
+  "description": "document tracking on blockchain",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mightybulacs/blockchain-lab.git"
+  },
+  "keywords": [
+    "blockchain",
+    "tracking",
+    "fabric",
+    "node",
+    "hyperledger"
+  ],
+  "author": "mightybulacs",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mightybulacs/blockchain-lab/issues"
+  },
+  "homepage": "https://github.com/mightybulacs/blockchain-lab#readme"
+}

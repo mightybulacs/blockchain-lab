@@ -1,0 +1,85 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+networks:
+  byfn:
+
+services:
+
+  orderer.codedisruptors.com:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.codedisruptors.com
+    container_name: orderer.codedisruptors.com
+    networks:
+      - byfn
+
+  peer0.codemagnus.com:
+    container_name: peer0.codemagnus.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.codemagnus.com
+    networks:
+      - byfn
+
+  peer1.codemagnus.com:
+    container_name: peer1.codemagnus.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.codemagnus.com
+    networks:
+      - byfn
+
+  peer0.mightybulacs.com:
+    container_name: peer0.mightybulacs.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.mightybulacs.com
+    networks:
+      - byfn
+
+  peer1.mightybulacs.com:
+    container_name: peer1.mightybulacs.com
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.mightybulacs.com
+    networks:
+      - byfn
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.codemagnus.com:7051
+      - CORE_PEER_LOCALMSPID=codemagnus.comMSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/codemagnus.com/users/Admin@codemagnus.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    # command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME} ${DELAY}; sleep $TIMEOUT'
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.codedisruptors.com
+      - peer0.codemagnus.com
+      - peer1.codemagnus.com
+      - peer0.mightybulacs.com
+      - peer1.mightybulacs.com
+    networks:
+      - byfn
+

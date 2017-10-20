@@ -1,0 +1,108 @@
+# Copyright IBM Corp. All Rights Reserved.
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+
+version: '2'
+
+services:
+
+  orderer.codedisruptors.com:
+    container_name: orderer.codedisruptors.com
+    image: hyperledger/fabric-orderer
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+    - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+    - ../crypto-config/ordererOrganizations/codedisruptors.com/orderers/orderer.codedisruptors.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/codedisruptors.com/orderers/orderer.codedisruptors.com/tls/:/var/hyperledger/orderer/tls
+    ports:
+      - 7050:7050
+
+  peer0.codemagnus.com:
+    container_name: peer0.codemagnus.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.codemagnus.com
+      - CORE_PEER_ADDRESS=peer0.codemagnus.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.codemagnus.com:7051
+      - CORE_PEER_LOCALMSPID=codemagnus.comMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/codemagnus.com/peers/peer0.codemagnus.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 7051:7051
+      - 7053:7053
+
+  peer1.codemagnus.com:
+    container_name: peer1.codemagnus.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.codemagnus.com
+      - CORE_PEER_ADDRESS=peer1.codemagnus.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.codemagnus.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.codemagnus.com:7051
+      - CORE_PEER_LOCALMSPID=codemagnus.comMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/codemagnus.com/peers/peer1.codemagnus.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/codemagnus.com/peers/peer1.codemagnus.com/tls:/etc/hyperledger/fabric/tls
+
+    ports:
+      - 8051:7051
+      - 8053:7053
+
+  peer0.mightybulacs.com:
+    container_name: peer0.mightybulacs.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer0.mightybulacs.com
+      - CORE_PEER_ADDRESS=peer0.mightybulacs.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.mightybulacs.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.mightybulacs.com:7051
+      - CORE_PEER_LOCALMSPID=mightybulacs.comMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/mightybulacs.com/peers/peer0.mightybulacs.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/mightybulacs.com/peers/peer0.mightybulacs.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 9051:7051
+      - 9053:7053
+
+  peer1.mightybulacs.com:
+    container_name: peer1.mightybulacs.com
+    extends:
+      file: peer-base.yaml
+      service: peer-base
+    environment:
+      - CORE_PEER_ID=peer1.mightybulacs.com
+      - CORE_PEER_ADDRESS=peer1.mightybulacs.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.mightybulacs.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.mightybulacs.com:7051
+      - CORE_PEER_LOCALMSPID=mightybulacs.comMSP
+    volumes:
+        - /var/run/:/host/var/run/
+        - ../crypto-config/peerOrganizations/mightybulacs.com/peers/peer1.mightybulacs.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/mightybulacs.com/peers/peer1.mightybulacs.com/tls:/etc/hyperledger/fabric/tls
+    ports:
+      - 10051:7051
+      - 10053:7053
